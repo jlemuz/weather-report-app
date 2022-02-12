@@ -1,0 +1,16 @@
+li {
+    background: #cce5ff;
+    color: darkblue;
+    margin: 5px;
+  }
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10vh;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,212,255,1) 41%, rgba(9,9,121,1) 81%); 
+    text-align: center;
+    color: white;;
+} 
