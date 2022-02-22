@@ -29,20 +29,21 @@ var today = new Date();
 
 function getDailyWeather(data){
     clearStart();
+    searchedHistory();
+
     var cityEl= document.querySelector('#city').value;
 
     var card = document.querySelector(`#grid-card-${0}`);
 
     var temp = document.createElement('div');
     temp.setAttribute('class', 'temp');
-    temp.textContent = ('Temp: ' + data.daily[0].temp.day);
-
+    temp.textContent = ('Temp: ' + data.daily[0].temp.day );
 
     var day = document.createElement('div');
     day.setAttribute('id', 'current-city');
     var date = moment().add(i, 'days');
     var today = moment().format('MM/DD/YYYY');
-    day.innerHTML = cityEl + ` (${today}) ` + `<img src="http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@4x.png"  width = "30px" length="30px"></img>`;
+    day.innerHTML = cityEl + ` (${today}) ` + `<img src="http://openweathermap.org/img/wn/${data.daily[0].weather[0].icon}@4x.png"  width = "40px" length="40px"></img>`;
 
     var wind = document.createElement('div');
     wind.setAttribute('class', 'wind');
@@ -50,7 +51,7 @@ function getDailyWeather(data){
 
     var humidity = document.createElement('div');
     humidity.setAttribute('class', 'humidity');
-    humidity.textContent = ('Humidity: ' + data.daily[i].humidity +  '%');
+    humidity.textContent = ('Humidity: ' + data.daily[0].humidity +  '%');
 
     var uvi =document.createElement('div');
     var uvi_deci =  data.daily[0].uvi/10;
@@ -61,7 +62,7 @@ function getDailyWeather(data){
         uvi.setAttribute('class', 'moderate');
     }
     else{
-        uvi._deci.setAttribute('class', 'severe')
+        uvi.setAttribute('class', 'severe')
     };
     uvi.textContent=('UV Index: ' + uvi_deci.toFixed(2));
 
@@ -118,6 +119,26 @@ function clearStart(){
     }
 }
 }
-
-    
+ 
 document.querySelector('#search').addEventListener('click', getWeather);
+
+
+function searchedHistory(){
+
+    var city_name = document.querySelector("#city").value;
+
+   if (localStorage.getItem('city') == null){
+        localStorage.setItem('city', '[]');
+   }
+
+   var searched_names = JSON.parse(localStorage.getItem('city'));
+   searched_names.push(city_name);
+   //Creates a Set which is an array of unique values
+   let uniqueCity = [...new Set(searched_names)]
+   //Saves object to local storage
+   localStorage.setItem('city', JSON.stringify(uniqueCity));
+
+   
+
+
+}

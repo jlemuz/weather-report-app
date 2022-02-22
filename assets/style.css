@@ -121,9 +121,27 @@ li {
 }
 
 
+.favorable{
+  background-color: green;
+}
+
 .moderate{
   background-color: yellow;
 }
 .severe{
   background-color: red;
 }
+
+p{
+  margin-bottom: 0px;
+}
+
+.search-history{
+  background-color: #e7e7e7;
+  color: black;
+  border: 2px solid #e7e7e7;
+  height: min-content;
+  padding: 5px;
+}
+
+.search-history:hover {background-color: white ;}
