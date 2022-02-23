@@ -1,3 +1,5 @@
+
+//Gets the name of the city and makes an API call to get the latitude and longitude coordinates for that city
 var getWeather = function(){
  var cityEl= document.querySelector('#city').value;
  console.log(cityEl);
@@ -16,7 +18,7 @@ var getWeather = function(){
         .then(
             data=>{
                 console.log(data);
-                getDailyWeather(data);
+                getDailyWeather(data, cityEl);
             }
         )
     }
@@ -24,14 +26,41 @@ var getWeather = function(){
     );
 }    
 
+var getWeatherHistory = function(cityEl){
+    
+    // var cityEl= document.querySelector('#city').value;
+    console.log(cityEl);
+       var weatherURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityEl}&limit=5&appid=8a15f2e8988dd05df66461025f4b2471`;
+   
+       fetch(weatherURL)
+       .then(response => response.json())
+       .then(data => {
+           const lat = data[0].lat;
+           const lon = data[0].lon;
+   
+           console.log(lat+' '+lon);
+   
+           return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=8a15f2e8988dd05df66461025f4b2471&units=imperial`)
+           .then(response => response.json())
+           .then(
+               data=>{
+                   console.log(data);
+                   getDailyWeather(data, cityEl);
+               }
+           )
+       }
+       
+       );
+   }    
+
 var date = new Date();
 var today = new Date();
 
-function getDailyWeather(data){
+function getDailyWeather(data, cityEl){
     clearStart();
     searchedHistory();
 
-    var cityEl= document.querySelector('#city').value;
+    //var cityEl= document.querySelector('#city').value;
 
     var card = document.querySelector(`#grid-card-${0}`);
 
@@ -125,6 +154,7 @@ document.querySelector('#search').addEventListener('click', getWeather);
 
 function searchedHistory(){
 
+    clearList();
     var city_name = document.querySelector("#city").value;
 
    if (localStorage.getItem('city') == null){
@@ -138,7 +168,29 @@ function searchedHistory(){
    //Saves object to local storage
    localStorage.setItem('city', JSON.stringify(uniqueCity));
 
-   
+   contain = document.querySelector('.search-items');
+
+   if(localStorage.getItem('city') == null){
+    }
+    else{
+        //For each item in localStorage a list element is created
+    for(i=0;i<JSON.parse(localStorage.city).length;i++){
+        var list = document.createElement('button');
+        list.setAttribute('class', 'search-history');
+        //Creates string with name and score
+        list.textContent=(JSON.parse(localStorage.city)[i]);
+        list.value = (JSON.parse(localStorage.city)[i]);
+        list.addEventListener("click", (e) => {getWeatherHistory(e.target.value)}); 
+        contain.appendChild(list);
+    }
+}
 
 
+}
+
+function clearList(){
+    clear = document.querySelector(".search-items");
+    while (clear.firstChild) {
+        clear.removeChild(clear.firstChild);
+};
 }
