@@ -1,8 +1,10 @@
+   //Sets the date values for today and a variable for the rest of the week
+   var date = new Date();
+   var today = new Date();
 
 //Gets the name of the city and makes an API call to get the latitude and longitude coordinates for that city
 var getWeather = function(){
  var cityEl= document.querySelector('#city').value;
- console.log(cityEl);
     var weatherURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityEl}&limit=5&appid=8a15f2e8988dd05df66461025f4b2471`;
 
     fetch(weatherURL)
@@ -12,12 +14,14 @@ var getWeather = function(){
         const lon = data[0].lon;
 
         console.log(lat+' '+lon);
-
+        
+        //Takes the latitude and longitude of the city and makes an API call to get the weather data
         return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=8a15f2e8988dd05df66461025f4b2471&units=imperial`)
         .then(response => response.json())
         .then(
             data=>{
                 console.log(data);
+                //Calls the function that will populate the DOM with the weather data
                 getDailyWeather(data, cityEl);
             }
         )
@@ -26,10 +30,9 @@ var getWeather = function(){
     );
 }    
 
+//This function is called when the search history buttons are pressed
 var getWeatherHistory = function(cityEl){
     
-    // var cityEl= document.querySelector('#city').value;
-    console.log(cityEl);
        var weatherURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityEl}&limit=5&appid=8a15f2e8988dd05df66461025f4b2471`;
    
        fetch(weatherURL)
@@ -53,15 +56,12 @@ var getWeatherHistory = function(cityEl){
        );
    }    
 
-var date = new Date();
-var today = new Date();
 
 function getDailyWeather(data, cityEl){
     clearStart();
     searchedHistory();
 
-    //var cityEl= document.querySelector('#city').value;
-
+    //Creates the current day DOM objects
     var card = document.querySelector(`#grid-card-${0}`);
 
     var temp = document.createElement('div');
@@ -82,6 +82,7 @@ function getDailyWeather(data, cityEl){
     humidity.setAttribute('class', 'humidity');
     humidity.textContent = ('Humidity: ' + data.daily[0].humidity +  '%');
 
+    //Sets the UVI colors based on the UVI value
     var uvi =document.createElement('div');
     var uvi_deci =  data.daily[0].uvi/10;
     if(uvi_deci<.30){
@@ -102,6 +103,7 @@ function getDailyWeather(data, cityEl){
     card.appendChild(humidity);
     card.appendChild(uvi);    
     
+    //Creates the weather card DOM items
     for(i=1; i<6; i++){
         
         console.log('Temp ' + i + ': ' + data.daily[i].temp.day + ' Humidity: ' + data.daily[i].humidity + ' UV Index: '+ data.daily[i].uvi
@@ -151,7 +153,7 @@ function clearStart(){
  
 document.querySelector('#search').addEventListener('click', getWeather);
 
-
+//Sets the local storage values
 function searchedHistory(){
 
     clearList();
@@ -180,6 +182,7 @@ function searchedHistory(){
         //Creates string with name and score
         list.textContent=(JSON.parse(localStorage.city)[i]);
         list.value = (JSON.parse(localStorage.city)[i]);
+        //Calls the getWeather function to retrieve the values
         list.addEventListener("click", (e) => {getWeatherHistory(e.target.value)}); 
         contain.appendChild(list);
     }
