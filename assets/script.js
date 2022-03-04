@@ -68,7 +68,7 @@ function getDailyWeather(data, cityEl){
     //Creates the current day DOM objects for the major card 
     var card = document.querySelector(`#grid-card-${0}`);
 
-    //Creates a div to display the temperatu re
+    //Creates a div to display the temperature
     var temp = document.createElement('div');
     temp.setAttribute('class', 'temp');
     temp.textContent = ('Temp: ' + data.daily[0].temp.day );
@@ -194,7 +194,7 @@ function searchedHistory(){
     }
     else{
         //For each item in localStorage a list element is created, only displays the last 8 items
-    for(i=0;i<7;i++){
+    for(i=0;i<JSON.parse(localStorage.city).length;i++){
         var list = document.createElement('button');
         list.setAttribute('class', 'search-history');
         //Creates string with name and score
