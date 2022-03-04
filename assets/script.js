@@ -35,7 +35,7 @@ var getWeather = function(){
 //This function is called when the search history buttons are pressed and displays the corresponding data
 var getWeatherHistory = function(cityEl){
     
-       var weatherURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityEl}&limit=5&appid=8a15f2e8988dd05df66461025f4b2471`;
+       var weatherURL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityEl}&limit=5&appid=8a15f2e8988dd05df66461025f4b2471`;
    
        fetch(weatherURL)
        .then(response => response.json())
